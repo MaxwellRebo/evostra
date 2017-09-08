@@ -3,13 +3,18 @@ import numpy as np
 
 class EvolutionStrategy(object):
 
-    def __init__(self, weights, get_reward_func, population_size=50, sigma=0.1, learning_rate=0.001):
+    def __init__(self, weights, get_reward_func, population_size=50, sigma=0.1, learning_rate=0.001, verbose=False):
         np.random.seed(0)
         self.weights = weights
         self.get_reward = get_reward_func
         self.POPULATION_SIZE = population_size
         self.SIGMA = sigma
         self.LEARNING_RATE = learning_rate
+        self.verbose = verbose
+        
+    def debug(self, message):
+        if self.verbose:
+            print message
 
 
     def _get_weights_try(self, w, p):
@@ -43,6 +48,8 @@ class EvolutionStrategy(object):
                 rewards[i] = self.get_reward(weights_try)
 
             rewards = (rewards - np.mean(rewards)) / np.std(rewards)
+            
+            self.debug(rewards)
 
             for index, w in enumerate(self.weights):
                 A = np.array([p[index] for p in population])
